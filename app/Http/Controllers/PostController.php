@@ -21,39 +21,6 @@ class PostController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('posts.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store()
-    {
-        $attributes = request()->validate([
-            'title' => 'required',
-            'slug' => ['required', Rule::unique('posts', 'slug')],
-            'thumbnail' => 'required|image',
-            'excerpt' => 'required',
-            'body' => 'required',
-            'category_id' => ['required', Rule::exists('categories', 'id')],
-        ]);
-
-        $attributes['thumbnail'] = request()->file('thumbnail')->store('thumbnails');
-        $attributes['user_id'] = auth()->user()->id;
-
-        $attributes['excerpt'] = trim($attributes['excerpt']);
-        $attributes['body'] = trim($attributes['body']);
-
-        Post::create($attributes);
-
-        return back()->with('success', 'your post have been created');
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(Post $post)
